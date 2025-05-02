@@ -19,7 +19,7 @@ function AddNewProduct() {
       title,
       quantity,
       category,
-      createdAt: new Date().toLocaleDateString("fa-IR"),
+      createdAt: new Date(Date.now()).toISOString(),
     };
     setProducts([...products, newProduct]);
     setFilteredProducts([...products, newProduct]);
@@ -29,7 +29,7 @@ function AddNewProduct() {
   };
 
   return (
-    <div className="mb-8">
+    <div className="my-6">
       <h1 className="text-xl font-bold text-white mb-2">Add New Product</h1>
       <form
         onSubmit={handleAddNewProduct}
@@ -37,11 +37,13 @@ function AddNewProduct() {
       >
         <Input
           label="title"
+          id="productTitle"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <Input
           label="quantity"
+          id="quantity"
           type="number"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}

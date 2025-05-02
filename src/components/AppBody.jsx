@@ -11,7 +11,7 @@ function AppBody() {
       {/* Add category and product */}
       <div className="w-full">
         {showAddCategory ? (
-          <AddNewCategory />
+          <AddNewCategory setShow={setShowAddCategory} />
         ) : (
           <h1
             onClick={() => setShowAddCategory(true)}

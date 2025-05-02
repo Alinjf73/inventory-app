@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useCategories } from "../contexts/CategoriesContext";
 import { useProducts } from "../contexts/ProductsContext";
 import SelectInput from "../UI/SelectInput";
+import Input from "../UI/Input";
 
 const sortOptions = [
   { id: "latest", title: "latest" },
@@ -69,11 +70,10 @@ function Filters() {
 
       {/* search filter */}
       <div className="flex items-center justify-between mb-4">
-        <span>Search</span>
-        <input
+        <label htmlFor="search">Search</label>
+        <Input
           className="bg-inherit border border-gray-400 rounded-lg p-1"
           type="text"
-          name="search"
           id="search"
           value={searchTerm}
           onChange={handleSearch}

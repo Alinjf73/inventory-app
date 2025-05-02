@@ -18,7 +18,9 @@ function ProductList() {
         >
           <span>{product.title}</span>
           <div className="flex items-center gap-x-3">
-            <span>{product.createdAt}</span>
+            <span>
+              {new Date(product.createdAt).toLocaleDateString("fa-IR")}
+            </span>
             <span className="border border-gray-400 rounded-full py-0.5 px-1">
               {product.category}
             </span>
