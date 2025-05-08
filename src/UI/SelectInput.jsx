@@ -18,7 +18,6 @@ function SelectInput({
         name={name}
         id={name}
       >
-        <option disabled>select a category</option>
         {options.map((item) => {
           return (
             <option key={item.id} value={item.title}>

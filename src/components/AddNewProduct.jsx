@@ -80,8 +80,10 @@ function AddNewProduct({ titleText, setOpenEdit, productToEdit = {} }) {
           required
           validationSchema={{
             required: "category is required",
+            validate: (value) =>
+              value !== "select a category" || "category is required",
           }}
-          options={categories}
+          options={[{ title: "select a category" }, ...categories]}
           errors={errors}
         />
 

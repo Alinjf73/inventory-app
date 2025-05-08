@@ -33,7 +33,7 @@ function ProductPage() {
         <div>
           <button onClick={moveBack} className="flex items-center gap-x-2">
             <HiArrowRight className="size-6 text-primary-900" />
-            <span>برگشت</span>
+            <span>back</span>
           </button>
         </div>
       </div>
