@@ -25,7 +25,7 @@ export default {
           200: withOpacity("--color-primary-200"),
           100: withOpacity("--color-primary-100"),
         },
-        seconday: {
+        secondary: {
           900: withOpacity("--color-secondary-900"),
           800: withOpacity("--color-secondary-800"),
           700: withOpacity("--color-secondary-700"),
@@ -35,6 +35,7 @@ export default {
           300: withOpacity("--color-secondary-300"),
           200: withOpacity("--color-secondary-200"),
           100: withOpacity("--color-secondary-100"),
+          0: withOpacity("--color-secondary-0"),
         },
         success: withOpacity("--color-success"),
         warning: withOpacity("--color-warning"),

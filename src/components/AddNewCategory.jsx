@@ -1,63 +1,79 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useCategories } from "../contexts/CategoriesContext";
 import Input from "../UI/Input";
+import TextArea from "../UI/TextArea";
 
 function AddNewCategory({ setShow }) {
   const { categories, setCategories } = useCategories();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm();
 
-  const handleAddNewCategory = (e) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-    const newCategory = { id: Date.now(), title, description };
+  const handleAddNewCategory = (data) => {
+    const newCategory = {
+      id: Date.now(),
+      title: data.title,
+      description: data.description,
+    };
     setCategories([...categories, newCategory]);
-    setTitle("");
-    setDescription("");
+    reset();
   };
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-white mb-2">Add New Category</h1>
+      <h1 className="text-xl font-bold text-secondary-700 mb-2">
+        Add New Category
+      </h1>
       <form
-        onSubmit={handleAddNewCategory}
-        className="bg-gray-700 p-4 space-y-4 rounded-lg"
+        onSubmit={handleSubmit(handleAddNewCategory)}
+        className="bg-secondary-300 p-6 space-y-4 rounded-lg"
       >
         <Input
           label="title"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title"
+          register={register}
+          required
+          validationSchema={{
+            required: "title is required",
+            minLength: {
+              value: 3,
+              message: "title length must be more than 3 characters",
+            },
+          }}
+          errors={errors}
+          autoFocus
         />
 
-        <div className="flex flex-col text-gray-400">
-          <label className="mb-1" htmlFor="description">
-            description
-          </label>
-          <textarea
-            className="bg-inherit border border-gray-400 rounded-lg p-2 focus:border-blue-500"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            id="description"
-          ></textarea>
-        </div>
+        <TextArea
+          label="description"
+          name="description"
+          register={register}
+          required
+          validationSchema={{
+            required: "description is required",
+            minLength: {
+              value: 10,
+              message: "description length must be more than 10 characters",
+            },
+          }}
+          errors={errors}
+        />
 
-        <div className="flex items-center gap-x-2">
+        <div className="flex items-center gap-x-4">
           <button
             type="button"
             onClick={() => {
-              setTitle("");
-              setDescription("");
+              reset();
               setShow(false);
             }}
-            className="w-full py-2 px-4 rounded-lg border border-gray-400 text-gray-400 bg-inherit"
+            className="btn btn--secondary"
           >
             Cancel
           </button>
-          <button
-            type="submit"
-            className="w-full py-2 px-4 rounded-lg bg-gray-500 text-white"
-          >
+          <button type="submit" className="btn btn--primary">
             Add Category
           </button>
         </div>

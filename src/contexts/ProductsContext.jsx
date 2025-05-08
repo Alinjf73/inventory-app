@@ -5,11 +5,18 @@ export const ProductsContext = createContext();
 
 export function ProductsProvider({ children }) {
   const [products, setProducts] = useLocalStorage("PRODUCTS", []);
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState(() => {
+    return JSON.parse(localStorage.getItem("PRODUCTS")) || [];
+  });
 
   const deleteProduct = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
-    setFilteredProducts(products.filter((product) => product.id !== id));
+    setProducts((prevProducts) => {
+      const updatedProducts = prevProducts.filter(
+        (product) => product.id !== id
+      );
+      setFilteredProducts(updatedProducts);
+      return updatedProducts;
+    });
   };
 
   return (

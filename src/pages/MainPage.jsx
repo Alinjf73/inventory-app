@@ -1,11 +1,14 @@
-import { useState } from "react";
-import AddNewCategory from "./AddNewCategory";
-import AddNewProduct from "./AddNewProduct";
-import Filters from "./Filters";
-import ProductList from "./ProductList";
+import AddNewCategory from "../components/AddNewCategory";
+import AddNewProduct from "../components/AddNewProduct";
+import Filters from "../components/Filters";
+import ProductList from "../components/ProductList";
+import useLocalStorage from "../hooks/useLocalStorage";
 
-function AppBody() {
-  const [showAddCategory, setShowAddCategory] = useState(false);
+function MainPage() {
+  const [showAddCategory, setShowAddCategory] = useLocalStorage(
+    "SHOWADDCATEGORY",
+    false
+  );
   return (
     <div className="flex flex-col justify-between container mx-auto xl:max-w-screen-xl md:flex-row md:gap-x-20">
       {/* Add category and product */}
@@ -17,10 +20,10 @@ function AppBody() {
             onClick={() => setShowAddCategory(true)}
             className="cursor-pointer font-bold text-xl text-gray-400"
           >
-            Add New Category
+            Add New Category?
           </h1>
         )}
-        <AddNewProduct />
+        <AddNewProduct titleText="Add New Product" />
       </div>
 
       {/* filters and list */}
@@ -32,4 +35,4 @@ function AppBody() {
   );
 }
 
-export default AppBody;
+export default MainPage;

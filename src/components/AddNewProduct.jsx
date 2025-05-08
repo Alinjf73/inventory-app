@@ -1,67 +1,92 @@
-import { useState } from "react";
 import { useProducts } from "../contexts/ProductsContext";
 import Input from "../UI/Input";
 import SelectInput from "../UI/SelectInput";
 import { useCategories } from "../contexts/CategoriesContext";
+import { useForm } from "react-hook-form";
 
-function AddNewProduct() {
+function AddNewProduct({ titleText, setOpenEdit, productToEdit = {} }) {
   const { products, setProducts, setFilteredProducts } = useProducts();
   const { categories } = useCategories();
-  const [title, setTitle] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [category, setCategory] = useState("");
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm({ defaultValues: productToEdit });
 
-  const handleAddNewProduct = (e) => {
-    e.preventDefault();
-    if (!title.trim() || !quantity.trim() || !category) return;
-    const newProduct = {
-      id: Date.now(),
-      title,
-      quantity,
-      category,
-      createdAt: new Date(Date.now()).toISOString(),
-    };
-    setProducts([...products, newProduct]);
-    setFilteredProducts([...products, newProduct]);
-    setTitle("");
-    setQuantity("");
-    setCategory("");
+  const handleAddNewProduct = (data) => {
+    let updatedProducts;
+
+    if (productToEdit.id) {
+      // edit product
+      updatedProducts = products.map((p) =>
+        p.id === productToEdit.id ? { ...p, ...data } : p
+      );
+    } else {
+      // add new product
+      const newProduct = {
+        id: Date.now(),
+        title: data.title,
+        quantity: data.quantity,
+        category: data.category,
+        createdAt: new Date().toISOString(),
+      };
+      updatedProducts = [...products, newProduct];
+    }
+
+    setProducts(updatedProducts);
+    setFilteredProducts(updatedProducts);
+    reset();
+    setOpenEdit(false);
   };
 
   return (
     <div className="my-6">
-      <h1 className="text-xl font-bold text-white mb-2">Add New Product</h1>
+      <h1 className="text-xl font-bold text-secondary-700 mb-2">{titleText}</h1>
       <form
-        onSubmit={handleAddNewProduct}
-        className="bg-gray-700 p-4 space-y-4 rounded-lg"
+        onSubmit={handleSubmit(handleAddNewProduct)}
+        className="bg-secondary-300 p-6 space-y-4 rounded-lg"
       >
         <Input
           label="title"
-          id="productTitle"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          name="title"
+          register={register}
+          required
+          validationSchema={{
+            required: "title is required",
+            minLength: {
+              value: 3,
+              message: "title length must be more than 3 characters",
+            },
+          }}
+          errors={errors}
+          autoFocus
         />
         <Input
           label="quantity"
-          id="quantity"
+          name="quantity"
+          register={register}
+          required
+          validationSchema={{
+            required: "quantity is required",
+          }}
           type="number"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          errors={errors}
         />
         <SelectInput
           label="category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          name="category"
+          register={register}
+          required
+          validationSchema={{
+            required: "category is required",
+          }}
           options={categories}
-        >
-          {" "}
-          <option>select a category</option>
-        </SelectInput>
-        <button
-          type="submit"
-          className="w-full py-2 px-4 rounded-lg bg-gray-500 text-white"
-        >
-          Add New Product
+          errors={errors}
+        />
+
+        <button type="submit" className="btn btn--primary">
+          {productToEdit.id ? "Update Product" : "Add New Product"}
         </button>
       </form>
     </div>

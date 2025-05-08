@@ -1,15 +1,15 @@
 import { createContext, useContext } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
 
-export const UserContext = createContext();
+export const CategoriesContext = createContext();
 
 export function CategoriesProvider({ children }) {
   const [categories, setCategories] = useLocalStorage("CATEGORIES", []);
   return (
-    <UserContext.Provider value={{ categories, setCategories }}>
+    <CategoriesContext.Provider value={{ categories, setCategories }}>
       {children}
-    </UserContext.Provider>
+    </CategoriesContext.Provider>
   );
 }
 
-export const useCategories = () => useContext(UserContext);
+export const useCategories = () => useContext(CategoriesContext);

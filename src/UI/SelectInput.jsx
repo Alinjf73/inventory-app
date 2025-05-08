@@ -1,17 +1,24 @@
-function SelectInput({ label, value, onChange, options = [], children }) {
+function SelectInput({
+  label,
+  name,
+  register,
+  required,
+  options = [],
+  errors,
+  validationSchema,
+}) {
   return (
-    <div className="flex flex-col text-gray-400">
-      <label className=" mb-1" htmlFor={label}>
-        {label}
+    <div className="flex flex-col">
+      <label className="text-secondary-900 mb-1" htmlFor={label}>
+        {label} {required && <span className="text-error">*</span>}
       </label>
       <select
-        onChange={onChange}
-        value={value}
-        className="bg-inherit border border-gray-400 rounded-lg p-1"
-        name={label}
-        id={label}
+        {...register(name, validationSchema)}
+        className="bg-secondary-300 border border-secondary-900 rounded-lg p-1 text-secondary-900"
+        name={name}
+        id={name}
       >
-        {children}
+        <option disabled>select a category</option>
         {options.map((item) => {
           return (
             <option key={item.id} value={item.title}>
@@ -20,6 +27,11 @@ function SelectInput({ label, value, onChange, options = [], children }) {
           );
         })}
       </select>
+      {errors && errors[name] && (
+        <span className="text-error block text-sm mt-2">
+          {errors[name]?.message}
+        </span>
+      )}
     </div>
   );
 }
