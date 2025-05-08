@@ -22,6 +22,7 @@ function AddNewProduct({ titleText, setOpenEdit, productToEdit = {} }) {
       updatedProducts = products.map((p) =>
         p.id === productToEdit.id ? { ...p, ...data } : p
       );
+      setOpenEdit(false);
     } else {
       // add new product
       const newProduct = {
@@ -37,7 +38,12 @@ function AddNewProduct({ titleText, setOpenEdit, productToEdit = {} }) {
     setProducts(updatedProducts);
     setFilteredProducts(updatedProducts);
     reset();
-    setOpenEdit(false);
+    // scroll to productList after adding a product in mobile mode
+    setTimeout(() => {
+      document
+        .getElementById("product-list")
+        ?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   return (
@@ -83,7 +89,7 @@ function AddNewProduct({ titleText, setOpenEdit, productToEdit = {} }) {
             validate: (value) =>
               value !== "select a category" || "category is required",
           }}
-          options={[{ title: "select a category" }, ...categories]}
+          options={[{ id: 0, title: "select a category" }, ...categories]}
           errors={errors}
         />
 

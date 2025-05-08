@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import { useProducts } from "../contexts/ProductsContext";
 import { HiEye, HiPencil, HiTrash } from "react-icons/hi";
 import Modal from "../UI/Modal";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ConfirmDelete from "../UI/ConfirmDelete";
 import AddNewProduct from "./AddNewProduct";
 import Count from "../UI/Count";
 
 function ProductList() {
-  const { filteredProducts, deleteProduct } = useProducts();
+  const { products, filteredProducts, deleteProduct } = useProducts();
   const [openDeleteId, setOpenDeleteId] = useState(null);
   const [openEditId, setOpenEditId] = useState(null);
 
@@ -17,8 +17,22 @@ function ProductList() {
     setOpenDeleteId(null);
   };
 
+  // scroll to productList after adding a product in mobile mode
+  const productListRef = useRef(null);
+  const prevProductCount = useRef(products.length);
+
+  useEffect(() => {
+    if (prevProductCount.current === products.length) return;
+
+    prevProductCount.current = products.length;
+
+    if (productListRef.current) {
+      productListRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [products.length]);
+
   return (
-    <div className="text-secondary-900">
+    <div ref={productListRef} className="text-secondary-900" id="product-list">
       <h2 className="font-bold text-lg">Product List</h2>
       <hr className="mb-4 border-secondary-900" />
       {filteredProducts.map((product) => (
